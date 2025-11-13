@@ -5,6 +5,10 @@
 
 #include <inttypes.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #define AT_BUFFER_SIZE 20480
 
 #define AT_MAX_LOGICAL_CHANNELS 20

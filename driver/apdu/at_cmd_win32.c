@@ -67,7 +67,7 @@ int at_expect(struct at_userdata *userdata, char **response, const char *expecte
     int result = -1;
     HANDLE hComm = userdata->hComm;
     char *at_read_buffer = userdata->at_read_buffer;
-    DWORD *at_read_buffer_len_ptr = &userdata->at_read_buffer_len; // Use pointer for easier modification
+    size_t *at_read_buffer_len_ptr = &userdata->at_read_buffer_len; // Use pointer for easier modification
 
     if (response)
         *response = NULL;
@@ -84,12 +84,6 @@ int at_expect(struct at_userdata *userdata, char **response, const char *expecte
             if (!ReadFile(hComm, at_read_buffer + *at_read_buffer_len_ptr,
                           sizeof(userdata->at_read_buffer) - *at_read_buffer_len_ptr, &bytes_read, NULL)) {
                 fprintf(stderr, "ReadFile error: %lu\n", GetLastError());
-                result = -1;
-                goto end;
-            }
-
-            if (bytes_read == 0) {
-                fprintf(stderr, "AT command timeout\n");
                 result = -1;
                 goto end;
             }
@@ -159,6 +153,19 @@ int at_device_open(struct at_userdata *userdata, const char *device_name) {
     dcb.DCBlength = sizeof(dcb);
     if (!GetCommState(userdata->hComm, &dcb)) {
         fprintf(stderr, "GetCommState failed, error: %lu\n", GetLastError());
+        CloseHandle(userdata->hComm);
+        return -1;
+    }
+
+    COMMTIMEOUTS cto = {};
+    cto.ReadIntervalTimeout = MAXDWORD;
+    cto.ReadTotalTimeoutMultiplier = 0;
+    cto.ReadTotalTimeoutConstant = 0;
+    cto.WriteTotalTimeoutConstant = 0;
+    cto.WriteTotalTimeoutMultiplier = 0;
+
+    if (!SetCommTimeouts(userdata->hComm, &cto)) {
+        fprintf(stderr, "SetCommTimeouts failed, error: %lu\n", GetLastError());
         CloseHandle(userdata->hComm);
         return -1;
     }
