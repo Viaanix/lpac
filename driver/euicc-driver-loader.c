@@ -211,6 +211,10 @@ static char *get_first_runpath() {
 }
 
 static char *get_driver_path() {
+    char *env_driver_dir = getenv("LPAC_DRIVER_DIR");
+    if (env_driver_dir != NULL)
+        return env_driver_dir;
+
     _cleanup_free_ char *LPAC_DRIVER_HOME = get_first_runpath();
     if (LPAC_DRIVER_HOME == NULL)
         return NULL;
