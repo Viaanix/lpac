@@ -28,6 +28,9 @@ static int apdu_interface_connect(struct euicc_ctx *ctx) {
         return -1;
     }
 
+    if (at_run_init_cmds(userdata) != 0)
+        return -1;
+
     if (!getenv_bool_or_default(ENV_AT_SKIP_TESTS, false)) {
         static const char *commands[] = {"AT+CCHO", "AT+CCHC", "AT+CGLA", NULL};
         for (int index = 0; commands[index] != NULL; index++) {

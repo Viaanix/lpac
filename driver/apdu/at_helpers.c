@@ -82,3 +82,26 @@ int at_emit_command(struct at_userdata *userdata, const char *fmt, ...) {
     int ret = at_write_command(userdata, formatted);
     return ret;
 }
+
+int at_run_init_cmds(struct at_userdata *userdata) {
+    const char *init_cmds = getenv_str_or_default(ENV_AT_INIT_CMDS, NULL);
+    if (init_cmds == NULL)
+        return -1;
+
+    while(init_cmds) {
+        const char *cmd_end = strchr(init_cmds, ';');
+        size_t cmd_len = cmd_end ? (cmd_end - init_cmds) : strlen(init_cmds);
+
+        if (cmd_len > 0) {
+            at_emit_command(userdata, "%.*s", cmd_len, init_cmds);
+            if (at_expect(userdata, NULL, NULL) != 0) {
+                fprintf(stderr, "AT init command \'%.*s\' failed\n", cmd_len, init_cmds);
+                return -1;
+            }
+        }
+
+        init_cmds = cmd_end ? (cmd_end + 1) : NULL;
+    }
+
+    return 0;
+}
