@@ -27,10 +27,12 @@ static int apdu_interface_connect(struct euicc_ctx *ctx) {
         return false;
     }
 
-    at_emit_command(userdata, "AT+CSIM=?");
-    if (at_expect(userdata, NULL, NULL) != 0) {
-        fprintf(stderr, "Device missing +CSIM support\n");
-        return false;
+    if (!getenv_bool_or_default(ENV_AT_SKIP_TESTS, false)) {
+        at_emit_command(userdata, "AT+CSIM=?");
+        if (at_expect(userdata, NULL, NULL) != 0) {
+            fprintf(stderr, "Device missing +CSIM support\n");
+            return false;
+        }
     }
 
     return true;
