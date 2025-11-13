@@ -1,4 +1,4 @@
-add_library(lpac-utils SHARED lpac/utils.c)
+add_library(lpac-utils STATIC lpac/utils.c)
 install(TARGETS lpac-utils LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 target_link_libraries(lpac-utils PRIVATE ${CJSON_LIBRARY} euicc)
 target_compile_options(lpac-utils PRIVATE -Wall -Wextra)

@@ -11,7 +11,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 include(CMakeDependentOption)
 option(USE_SYSTEM_DEPS "Use system-wide installed dependencies" OFF)
 option(STANDALONE_MODE "All things in a relocatable directory" OFF)
-option(LPAC_DYNAMIC_LIBEUICC "Build and install libeuicc as a dynamic library" ON)
+option(LPAC_DYNAMIC_LIBEUICC "Build and install libeuicc as a dynamic library" OFF)
 
 
 set(LPAC_CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
