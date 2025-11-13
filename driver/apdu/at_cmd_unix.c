@@ -162,8 +162,16 @@ int at_device_open(struct at_userdata *userdata, const char *device_name) {
     // This is crucial for AT command communication.
     cfmakeraw(&tty);
 
+    int baud_rate = getenv_int_or_default(ENV_AT_BAUD_RATE, 0);
+    if (baud_rate > 0) {
+        cfsetispeed(&tty, baud_rate);
+        cfsetospeed(&tty, baud_rate);
+    }
+
     // Set other essential parameters.
     tty.c_cflag |= (CLOCAL | CREAD); // Ignore modem control lines, enable receiver.
+    tty.c_cflag |= CS8;              // 8-bit characters.
+    tty.c_cflag &= ~PARENB;          // No parity bit
     tty.c_cflag &= ~CSTOPB;          // 1 stop bit.
     tty.c_cflag &= ~CRTSCTS;         // No hardware flow control.
 

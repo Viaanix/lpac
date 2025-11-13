@@ -157,6 +157,19 @@ int at_device_open(struct at_userdata *userdata, const char *device_name) {
         return -1;
     }
 
+    int baud_rate = getenv_int_or_default(ENV_AT_BAUD_RATE, 0);
+    if (baud_rate > 0) dcb.BaudRate = baud_rate;
+    // Hardcode as 8N1 for now...
+    dcb.ByteSize = 8;
+    dcb.Parity = NOPARITY;
+    dcb.StopBits = ONESTOPBIT;
+
+    if (!SetCommState(userdata->hComm, &dcb)) {
+        fprintf(stderr, "SetCommState failed, error: %lu\n", GetLastError());
+        CloseHandle(userdata->hComm);
+        return -1;
+    }
+
     COMMTIMEOUTS cto = {};
     cto.ReadIntervalTimeout = MAXDWORD;
     cto.ReadTotalTimeoutMultiplier = 0;

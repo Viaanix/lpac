@@ -17,6 +17,7 @@
 #define ENV_AT_DEVICE APDU_ENV_NAME(AT, DEVICE)
 #define ENV_AT_SKIP_TESTS APDU_ENV_NAME(AT, SKIP_TESTS)
 #define ENV_AT_INIT_CMDS APDU_ENV_NAME(AT, INIT_CMDS)
+#define ENV_AT_BAUD_RATE APDU_ENV_NAME(AT, BAUD_RATE)
 
 struct at_userdata {
     char *default_device;
