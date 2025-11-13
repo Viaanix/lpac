@@ -24,18 +24,18 @@ static int apdu_interface_connect(struct euicc_ctx *ctx) {
     at_emit_command(userdata, "AT");
     if (at_expect(userdata, NULL, NULL) != 0) {
         fprintf(stderr, "Device not responding to AT commands\n");
-        return false;
+        return -1;
     }
 
     if (!getenv_bool_or_default(ENV_AT_SKIP_TESTS, false)) {
         at_emit_command(userdata, "AT+CSIM=?");
         if (at_expect(userdata, NULL, NULL) != 0) {
             fprintf(stderr, "Device missing +CSIM support\n");
-            return false;
+            return -1;
         }
     }
 
-    return true;
+    return 0;
 }
 
 static void apdu_interface_disconnect(struct euicc_ctx *ctx) {
