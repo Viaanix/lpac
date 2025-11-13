@@ -10,6 +10,8 @@
   ([boolean](backends/types.md#boolean-type), default: `false`)
 - `LPAC_HTTP_DEBUG`: enable debug output for HTTP. \
   ([boolean](backends/types.md#boolean-type), default: `false`)
+- `LPAC_DRIVER_DIR`: explicit path to a directory containing the driver libraries. \
+  ([string](backends/types.md#string-type), default: none, will be based on the executable location otherwise)
 
 ## Backends
 

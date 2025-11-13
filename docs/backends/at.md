@@ -52,3 +52,9 @@ Use the [AT+CSIM][unmanaged] command for APDU transmission.
   ([string](types.md#string-type), default: `/dev/ttyUSB0` on Unix-like platform and `COM3` on Windows)
 - `LPAC_APDU_AT_DEBUG`: enable debug output for AT APDU backend. \
   ([boolean](types.md#boolean-type), default: `false`)
+- `LPAC_APDU_AT_SKIP_TESTS`: disable tests for the required AT commands, some modems may support the 'set' \
+  forms of these commands but not the 'test' forms. ([boolean](types.md#boolean-type), default: `false`)
+- `LPAC_APDU_AT_INIT_CMDS`: a semicolon-separated list of AT commands to run before anything else. \
+  ([string](types.md#string-type), default: none)
+- `LPAC_APDU_AT_BAUD_RATE`: the baud rate to set on the serial port if non-zero. \
+  ([integer](types.md#integer-type), default: `0`).
